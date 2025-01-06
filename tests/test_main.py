@@ -11,6 +11,11 @@ ENDPOINT = os.getenv("LOCALSTACK_ENDPOINT", "http://localhost:4566")
 
 @pytest.fixture(scope="session")
 def s3_local():
+    """ローカル用S3クライアントを生成します。
+
+    :return: _description_
+    :rtype: _type_
+    """
     s3 = boto3.client("s3", region_name=AWS_REGION, endpoint_url=ENDPOINT)
     return s3
 
@@ -28,7 +33,7 @@ def setup_s3(s3_local):
 
     s3_local.create_bucket(
         Bucket=bucket_name,
-        CreateBucketConfiguration={"LocationConstraint": "ap-northeast-1"},
+        CreateBucketConfiguration={"LocationConstraint": AWS_REGION},
     )
     s3_local.put_object(Bucket=bucket_name, Key=object_key)
 
@@ -39,6 +44,13 @@ def setup_s3(s3_local):
 
 
 def test_local_stack(setup_s3, s3_local):
+    """LocalStackを使ってS3バケットにファイルがあるかどうかチェックする。
+
+    :param setup_s3: _description_
+    :type setup_s3: _type_
+    :param s3_local: _description_
+    :type s3_local: _type_
+    """
     s3_local.head_object(
         Bucket="sample",
         Key="dummy.txt",
@@ -46,5 +58,6 @@ def test_local_stack(setup_s3, s3_local):
 
 
 def test_main():
+    """PyTestを動かすサンプル"""
     actual = main.main(3, 4)
     assert actual == 7
