@@ -3,15 +3,14 @@ import boto3
 import os
 from create_param import main
 
-
-AWS_PROFILE = os.getenv("AWS_PROFILE", "localstack")
+os.environ["AWS_ACCESS_KEY_ID"] = "AKIAIOSFODNN7EXAMPLE"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-1")
 ENDPOINT = os.getenv("LOCALSTACK_ENDPOINT", "http://localhost:4566")
 
 
 @pytest.fixture(scope="session")
 def s3_local():
-    boto3.setup_default_session(profile_name=AWS_PROFILE)
     s3 = boto3.client("s3", region_name=AWS_REGION, endpoint_url=ENDPOINT)
     return s3
 
