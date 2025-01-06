@@ -1,0 +1,16 @@
+services:
+  localstack:
+    container_name: localstack_main
+    hostname: localstack
+    image: localstack/localstack
+    ports:
+      - "4566:4566" # communicate with LocalStack
+    environment:
+      - SERVICES=dynamodb,s3
+      - PERSISTENCE=1
+      - DYNAMODB_SHARE_DB=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./tmp/volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./setup:/etc/localstack/init/ready.d" # initial script
