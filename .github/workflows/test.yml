@@ -26,6 +26,8 @@ jobs:
           python -m pip install pipenv
       - name: install packages
         run: pipenv sync --dev
+      - name: start docker compose
+        run: docker compose up -d
       - name: run test
         run: pipenv run pytest -q --junit-xml pytest.xml
         continue-on-error: true
